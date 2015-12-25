@@ -1,5 +1,5 @@
 # MARCJson
-Simple gem that converts a MARC record to a json 
+Simple gem that converts a MARC record to json 
 
 
 ## Installation
