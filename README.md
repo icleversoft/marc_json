@@ -1,8 +1,6 @@
-# MarcJson
+# MARCJson
+Simple gem that converts a MARC record to a json 
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/marc_json`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -21,8 +19,11 @@ Or install it yourself as:
     $ gem install marc_json
 
 ## Usage
-
-TODO: Write usage instructions here
+```
+marc_record = MARC::Reader.new(MARC_FILE).first
+m_json = MARCjson::Renderer.new( marc_record )
+j_json.to_json #=>{...}
+```
 
 ## Development
 
@@ -32,7 +33,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/marc_json.
+Bug reports and pull requests are welcome on GitHub at https://github.com/icleversoft/marc_json.
 
 
 ## License
