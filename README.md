@@ -22,7 +22,7 @@ Or install it yourself as:
 ```
 marc_record = MARC::Reader.new(MARC_FILE).first
 m_json = MARCjson::Renderer.new( marc_record )
-j_json.to_json #=>{...}
+m_json.to_json #=>{...}
 ```
 
 ## Development
