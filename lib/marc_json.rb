@@ -50,10 +50,7 @@ module MARCJson
    private
    def build_record
      @marc.leader = @json.delete("000")
-     @json.each do |tag, value|
-       @marc.append_tag_value( tag, value )
-     end
-
+     @json.each{|t, v| @marc.append_tag_value(t, v)}
    end
 
    def json_is_valid?( json_data )
