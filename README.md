@@ -21,10 +21,17 @@ Or install it yourself as:
     $ gem install marc_json
 
 ## Usage
+**From MARC to JSON**
 ```
 marc_record = MARC::Reader.new(MARC_FILE).first
 m_json = MARCjson::Renderer.new( marc_record )
 m_json.to_json #=>{...}
+```
+
+**From JSON to MARC**
+```
+m = MARCJson::Reader.new( json )
+m.to_marc #=>ISO2709 record
 ```
 
 ## Development
