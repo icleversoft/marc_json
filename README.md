@@ -1,7 +1,7 @@
 [![Build
 Status](https://travis-ci.org/icleversoft/marc_json.png)](https://travis-ci.org/icleversoft/marc_json)
 # MARCJson
-Simple gem that converts a MARC record to json 
+Simple gem that converts a MARC record to json and vise versa.
 
 
 ## Installation
