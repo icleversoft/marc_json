@@ -10,4 +10,9 @@ describe MARCJson do
     m = MARCJson::Renderer.new( marc )
     expect(m.to_json).to eq(json)
   end
+
+  it 'converts a json back to marc record' do
+    m = MARCJson::Reader.new( json )
+    expect(m.to_marc).to eq marc
+  end
 end

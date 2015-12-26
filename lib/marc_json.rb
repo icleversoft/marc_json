@@ -1,6 +1,6 @@
 require "marc_json/version"
 require 'marc_json/marc_ext'
-#require 'json'
+require 'json'
 
 module MARCJson
   class Renderer
@@ -33,5 +33,38 @@ module MARCJson
       @data[field.tag] ||= []
       @data[field.tag] << field.to_json 
     end
+  end
+
+  class Reader
+    include MARC
+    def initialize( json_data = {} )
+      @marc = Record.new
+      build_record if json_is_valid?( json_data )
+    end
+
+    def to_marc
+      @marc
+    end
+
+
+   private
+   def build_record
+     @marc.leader = @json.delete("000")
+     @json.each do |tag, value|
+       @marc.append_tag_value( tag, value )
+     end
+
+   end
+
+   def json_is_valid?( json_data )
+     ret_val = false
+     begin
+       @json = json_data.is_a?(Hash) ? json_data : JSON.parse( json_data )
+       ret_val = true
+     rescue 
+       @json = {}
+     end
+     ret_val
+   end
   end
 end
