@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'marc'
 
 describe MARCJson do
   include_context 'shared_data'
@@ -19,6 +20,11 @@ describe MARCJson do
   it 'converts a json string to marc record' do
     m = MARCJson::Reader.new( json.to_json )
     expect(m.to_marc).to eq marc
+  end
+
+  it 'returns an empty marc record when json is invalid' do
+    m = MARCJson::Reader.new( "blalbdx" )
+    expect(m.to_marc).to eq MARC::Record.new 
   end
 
 end
