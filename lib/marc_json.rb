@@ -58,7 +58,7 @@ module MARCJson
      begin
        @json = json_data.is_a?(Hash) ? json_data : JSON.parse( json_data )
        ret_val = true
-     rescue 
+     rescue => e
        @json = {}
      end
      ret_val

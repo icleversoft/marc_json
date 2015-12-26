@@ -11,8 +11,14 @@ describe MARCJson do
     expect(m.to_json).to eq(json)
   end
 
-  it 'converts a json back to marc record' do
+  it 'converts a hash back to marc record' do
     m = MARCJson::Reader.new( json )
     expect(m.to_marc).to eq marc
   end
+
+  it 'converts a json string to marc record' do
+    m = MARCJson::Reader.new( json.to_json )
+    expect(m.to_marc).to eq marc
+  end
+
 end
