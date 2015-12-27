@@ -8,8 +8,12 @@ module MARCJson
       process_fields( marc.fields  )
     end
 
-    def to_json
+    def to_hash
       @data
+    end
+
+    def to_json
+      @data.to_json
     end
 
     private
