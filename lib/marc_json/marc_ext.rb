@@ -2,7 +2,7 @@ require 'marc'
 
 module MARCJson
   class MARC::DataField
-    def to_json
+    def to_fjson
       [indicators_as_string].concat(subfields_as_arrays)
     end
 
@@ -11,7 +11,7 @@ module MARCJson
     end
 
     def subfields_as_arrays
-      subfields.map{|s| s.to_json}
+      subfields.map{|s| s.to_fjson}
     end
 
     class << self
@@ -24,7 +24,7 @@ module MARCJson
   end
 
   class MARC::Subfield
-    def to_json
+    def to_fjson
       [code, value]
     end
   end

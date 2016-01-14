@@ -31,7 +31,7 @@ module MARCJson
 
     def datafield( field )
       @data[field.tag] ||= []
-      @data[field.tag] << field.to_json 
+      @data[field.tag] << field.to_fjson
     end
   end
 end

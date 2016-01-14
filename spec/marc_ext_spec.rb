@@ -4,7 +4,7 @@ describe 'marc_ext' do
   context 'subfield' do
     let(:subfield){MARC::Subfield.new('a', 'value')}
     it 'returns an array' do
-      expect(subfield.to_json).to eq ['a', 'value']
+      expect(subfield.to_fjson).to eq ['a', 'value']
     end
   end
   context 'datafield' do
@@ -12,13 +12,13 @@ describe 'marc_ext' do
     it "returns indicators as string" do
       expect(datafield.indicators_as_string).to eq '12'
     end
-    
+
     it "returns subfields in array" do
       expect(datafield.subfields_as_arrays).to eq [['a', 'Subfield a'], ['b', 'Subfield b']]
     end
 
     it "returns a json" do
-      expect(datafield.to_json).to eq ['12', ['a', 'Subfield a'], ['b', 'Subfield b']]
+      expect(datafield.to_fjson).to eq ['12', ['a', 'Subfield a'], ['b', 'Subfield b']]
     end
   end
 
