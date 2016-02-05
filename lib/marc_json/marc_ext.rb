@@ -11,7 +11,7 @@ module MARCJson
     end
 
     def subfields_as_arrays
-      subfields.map{|s| s.to_fjson}
+      subfields.map{|s| s.to_fjson}.delete_if{|i| i.nil?}
     end
 
     class << self
@@ -25,7 +25,11 @@ module MARCJson
 
   class MARC::Subfield
     def to_fjson
-      [code, value]
+      stripped_value.empty? ? nil : [code, stripped_value] 
+    end
+
+    def stripped_value
+      value.strip
     end
   end
 
