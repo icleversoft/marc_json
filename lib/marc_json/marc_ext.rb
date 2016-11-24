@@ -1,6 +1,7 @@
 require 'marc'
 
 module MARCJson
+
   class MARC::DataField
     def to_fjson
       [indicators_as_string].concat(subfields_as_arrays)
@@ -14,7 +15,33 @@ module MARCJson
       subfields.map{|s| s.to_fjson}.delete_if{|i| i.nil?}
     end
 
+    def subfield_hashes
+      ->(subfield){ { subfield.code => subfield.value } }
+    end
+
+    def to_djson
+      {
+              ind: indicators_as_string,
+            count: subfields_stats,
+        subfields: subfields.map(&subfield_hashes)
+      }
+    end
+
+    def subfields_stats
+      ret_val = {}
+      subfields.each do |subfield|
+        k = ret_val[subfield.code] || 0
+        ret_val[subfield.code] = k + 1
+      end
+      ret_val
+    end
+
     class << self
+
+      def dvalue
+
+      end
+
       def from_tag_array(tag, arr)
         indicators = arr.delete_at( 0 )
         MARC::DataField.new( tag, indicators[0], indicators[1], *arr )
@@ -25,7 +52,7 @@ module MARCJson
 
   class MARC::Subfield
     def to_fjson
-      stripped_value.empty? ? nil : [code, stripped_value] 
+      stripped_value.empty? ? nil : [code, stripped_value]
     end
 
     def stripped_value
@@ -35,6 +62,21 @@ module MARCJson
 
 
   class MARC::Record
+    def each_part_in_djson
+      yield 'LDR', leader_to_djson
+      tags.each do |tag|
+        yield tag, to_djson(tag)
+      end
+    end
+
+    def leader_to_djson
+      { record_no => leader }.to_json
+    end
+
+    def to_djson(tag)
+      (self[tag] ? djson_for_field(self[tag]) : {}).to_json
+    end
+
     def append_tag_value( tag, value )
       if value.is_a? String
         append( controlfield_from_pair( tag, value ) )
@@ -44,7 +86,30 @@ module MARCJson
         end
       end
     end
+
+    def controlfields
+      fields.select{ |field| field.is_a?(MARC::ControlField) }
+    end
+
+    def datafields
+      fields.select{ |field| field.is_a?(MARC::DataField) }.group_by(&:tag)
+    end
+
     private
+
+    def djson_for_field(field)
+      field.is_a?(MARC::ControlField) ? { record_no => field.value } : { record_no => djson_for_datafield(field)}
+    end
+
+    def djson_for_datafield(field)
+      dfields = datafields[field.tag]
+      { count: dfields.size, fields: dfields.collect{ |field| field.to_djson } }
+    end
+
+    def record_no
+      (self['001'] ? self['001'].value : Time.current.to_i).to_s
+    end
+
     def controlfield_from_pair( tag, value )
       MARC::ControlField.new( tag, value )
     end
