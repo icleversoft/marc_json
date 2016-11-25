@@ -38,10 +38,6 @@ module MARCJson
 
     class << self
 
-      def dvalue
-
-      end
-
       def from_tag_array(tag, arr)
         indicators = arr.delete_at( 0 )
         MARC::DataField.new( tag, indicators[0], indicators[1], *arr )
@@ -63,18 +59,14 @@ module MARCJson
 
   class MARC::Record
     def each_part_in_djson
-      yield 'LDR', leader_to_djson
+      yield 'LDR', leader
       tags.each do |tag|
         yield tag, to_djson(tag)
       end
     end
 
-    def leader_to_djson
-      { record_no => leader }.to_json
-    end
-
     def to_djson(tag)
-      (self[tag] ? djson_for_field(self[tag]) : {}).to_json
+      (self[tag] ? djson_for_field(self[tag]) : {})
     end
 
     def append_tag_value( tag, value )
@@ -95,19 +87,19 @@ module MARCJson
       fields.select{ |field| field.is_a?(MARC::DataField) }.group_by(&:tag)
     end
 
+    def record_no
+      (self['001'] ? self['001'].value : Time.current.to_i).to_s
+    end
+
     private
 
     def djson_for_field(field)
-      field.is_a?(MARC::ControlField) ? { record_no => field.value } : { record_no => djson_for_datafield(field)}
+      field.is_a?(MARC::ControlField) ? field.value :  djson_for_datafield(field)
     end
 
     def djson_for_datafield(field)
       dfields = datafields[field.tag]
       { count: dfields.size, fields: dfields.collect{ |field| field.to_djson } }
-    end
-
-    def record_no
-      (self['001'] ? self['001'].value : Time.current.to_i).to_s
     end
 
     def controlfield_from_pair( tag, value )

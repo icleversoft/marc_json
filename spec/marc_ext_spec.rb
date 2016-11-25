@@ -64,33 +64,10 @@ describe 'marc_ext' do
     end
 
     context 'djson' do
-      context 'leader' do
-        it 'returns control number and the leader' do
-          k = { '1' => marc.leader }
-          expect(marc.leader_to_djson).to eq k.to_json
-        end
-      end
-
-      context 'controlfield' do
-        it 'returns control number and the value of field' do
-          k = { '1' => marc['005'].value }
-          expect(marc.to_djson('005')).to eq k.to_json
-        end
-      end
-
       context 'datafield' do
         it 'returns the right json' do
-          k = { '1' => { 'count' => 1, :fields => [ { ind: '  ', count: { 'a' => 1}, subfields: [{ 'a' => '19991022d        |||y0Grey50      ba'}]}]}}
-          expect(marc.to_djson('100')).to eq k.to_json
-          p marc.to_djson('701')
-        end
-      end
-    end
-
-    context 'yield djson' do
-      it 'yields all record parts' do
-        marc.each_part_in_djson do |tag, part|
-          p "#{tag} ---> #{part}"
+          k = { :count => 1, :fields => [ { ind: '  ', count: { 'a' => 1}, subfields: [{ 'a' => '19991022d        |||y0Grey50      ba'}]}]}
+          expect(marc.to_djson('100')).to eq k
         end
       end
     end
