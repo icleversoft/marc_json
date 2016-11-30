@@ -83,7 +83,7 @@ module MARCJson
       fields.select{ |field| field.is_a?(MARC::ControlField) }
     end
 
-    def datafields
+    def grouped_datafields
       fields.select{ |field| field.is_a?(MARC::DataField) }.group_by(&:tag)
     end
 
@@ -98,7 +98,7 @@ module MARCJson
     end
 
     def djson_for_datafield(field)
-      dfields = datafields[field.tag]
+      dfields = grouped_datafields[field.tag]
       { count: dfields.size, fields: dfields.collect{ |field| field.to_djson } }
     end
 

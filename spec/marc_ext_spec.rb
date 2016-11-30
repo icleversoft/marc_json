@@ -52,7 +52,7 @@ describe 'marc_ext' do
     end
 
     context 'datafields' do
-      let(:subject) { marc.datafields }
+      let(:subject) { marc.grouped_datafields }
 
       it 'is an Hash' do
         expect(subject).to be_an Hash
