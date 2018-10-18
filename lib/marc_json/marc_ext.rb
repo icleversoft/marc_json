@@ -16,7 +16,7 @@ module MARCJson
     end
 
     def subfield_hashes
-      ->(subfield){ { subfield.code => subfield.value } }
+      ->(subfield){ { subfield.code.to_s => subfield.value } }
     end
 
     def to_djson
@@ -48,7 +48,7 @@ module MARCJson
 
   class MARC::Subfield
     def to_fjson
-      stripped_value.empty? ? nil : [code, stripped_value]
+			stripped_value.empty? ? nil : [code.to_s, stripped_value]
     end
 
     def stripped_value
